@@ -88,4 +88,12 @@ export const turboIntegrations = {
     imgLight: '/logo-gradient.png',
     imgDark: '/logo-dark.png',
   },
+  superfluid: {
+    name: 'Superfluid',
+    href: '/integration/superfluid',
+    url: 'https://docs.superfluid.finance/superfluid/',
+    description: 'Use this template to get up and running with TurboETH and Superfluid.',
+    imgLight: '/integrations/superfluid-light.svg',
+    imgDark: '/integrations/superfluid-dark.svg',
+  },
 }
