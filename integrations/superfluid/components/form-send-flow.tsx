@@ -24,7 +24,7 @@ const formSchema = z.object({
 
 export default function App() {
   const { data: walletClient, isError, isLoading } = useWalletClient()
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   // const chainId = useChainId()
   // const infuraUrl = getInfuraUrl(chainId)
   // const provider = new ethers.providers.JsonRpcProvider(`${infuraUrl}/${INFURA_API_KEY}`)
@@ -123,7 +123,7 @@ export default function App() {
               )}
             />
           </div>
-          <button className="btn btn-emerald" type="submit" disabled={isLoading || !prompt}>
+          <button className="btn btn-emerald" type="submit" disabled={isLoading}>
             Submit
           </button>
         </motion.form>
