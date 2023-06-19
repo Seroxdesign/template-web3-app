@@ -269,4 +269,17 @@ const features = [
       </div>
     ),
   },
+  {
+    title: turboIntegrations.superfluid.name,
+    description: turboIntegrations.superfluid.description,
+    href: turboIntegrations.superfluid.href,
+    demo: (
+      <div className="flex items-center justify-center space-x-20">
+        <BranchColorMode>
+          <Image alt="Superfluid logo" src={turboIntegrations.superfluid.imgDark} width={100} height={100} />
+          <Image alt="Superfluid logo" src={turboIntegrations.superfluid.imgLight} width={100} height={100} />
+        </BranchColorMode>
+      </div>
+    ),
+  },
 ]
