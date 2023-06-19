@@ -78,7 +78,11 @@ export default function App() {
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-base">Receiver</FormLabel>
                 <FormControl>
-                  <Input placeholder="ethereum address here" className="input" {...field} />
+                  <Input
+                    placeholder="ethereum address here"
+                    className="input text-gray-600 placeholder:text-gray-500 dark:text-gray-600 dark:placeholder:text-gray-500"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription className="text-gray-500"> This is the receivers valid EVM address. </FormDescription>
                 <FormMessage />
@@ -115,7 +119,11 @@ export default function App() {
                 <FormItem className="flex w-1/2 flex-col gap-1">
                   <FormLabel className="text-base">Amount (Monthly)</FormLabel>
                   <FormControl>
-                    <Input placeholder="100 / month" className="input" {...field} />
+                    <Input
+                      placeholder="100 / month"
+                      className="input  text-gray-600 placeholder:text-gray-500 dark:text-gray-600 dark:placeholder:text-gray-500"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription className="text-gray-500"> Amount to stream to receiver, monthly. </FormDescription>
                   <FormMessage />
@@ -123,7 +131,7 @@ export default function App() {
               )}
             />
           </div>
-          <button className="btn btn-emerald" type="submit" disabled={isLoading}>
+          <button className="btn btn-emerald" type="submit" disabled={!isLoading}>
             Submit
           </button>
         </motion.form>
@@ -131,7 +139,7 @@ export default function App() {
 
       <hr className="my-4" />
       <div className="flex items-center justify-between">
-        <h3 className="text-center">Start Superfluid stream</h3>
+        <h3 className="text-center">Start a Superfluid Stream</h3>
         <p className="text-center text-sm text-gray-500">
           Enter a valid evm address to receive tokens, select a token to stream & set the monthly amount.
         </p>

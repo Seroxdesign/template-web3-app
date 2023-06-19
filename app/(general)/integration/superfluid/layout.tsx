@@ -12,11 +12,15 @@ import { LinkComponent } from '@/components/shared/link-component'
 import { FADE_DOWN_ANIMATION_VARIANTS } from '@/config/design'
 import { turboIntegrations } from '@/data/turbo-integrations'
 
+const balancePath = '/integration/superfluid/balance'
+const startFlowPath = '/integration/superfluid/start-flow'
+const stopFlowPath = '/integration/superfluid/stop-flow'
+
 export default function SuperfluidLayout({ children }: { children: ReactNode }) {
   const { address, isConnecting, isDisconnected } = useAccount()
   const classes = 'flex-center flex flex-1 flex-col items-center justify-center'
   const button =
-    'bg-gradient-sand flex max-w-fit text-xl font-bold items-center justify-center space-x-2 rounded-full px-5 py-2 text-white transition hover:scale-105'
+    'flex max-w-fit text-xl font-bold items-center justify-center space-x-2 rounded-full px-5 py-2 text-neutral-900 dark:text-white transition hover:scale-105'
 
   return (
     <>
@@ -45,10 +49,10 @@ export default function SuperfluidLayout({ children }: { children: ReactNode }) 
           <motion.h1
             className="text-gradient-sand pb-5 text-center text-2xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-8xl md:leading-[6rem]"
             variants={FADE_DOWN_ANIMATION_VARIANTS}>
-            Superfluid
+            {turboIntegrations.superfluid.name}
           </motion.h1>
           <motion.p className="mt-6 text-center text-gray-500 dark:text-gray-200 md:text-xl" variants={FADE_DOWN_ANIMATION_VARIANTS}>
-            <Balancer className="text-xl font-semibold">Start integrating Superfluid streams today</Balancer>
+            <Balancer className="text-xl font-semibold">{turboIntegrations.superfluid.description}</Balancer>
           </motion.p>
 
           <motion.div className="my-4 text-xl" variants={FADE_DOWN_ANIMATION_VARIANTS}>
@@ -58,13 +62,13 @@ export default function SuperfluidLayout({ children }: { children: ReactNode }) 
           </motion.div>
           {address ? (
             <motion.div className="mx-auto mt-6 flex items-center justify-center space-x-8" variants={FADE_DOWN_ANIMATION_VARIANTS}>
-              <Link href="/integration/superfluid/balance">
+              <Link href={balancePath}>
                 <p className={button}>Balance</p>
               </Link>
-              <Link href="/integration/superfluid/start-flow">
+              <Link href={startFlowPath}>
                 <p className={button}>Start Flow</p>
               </Link>
-              <Link href="/integration/superfluid/stop-flow">
+              <Link href={stopFlowPath}>
                 <p className={button}>Stop Flow</p>
               </Link>
             </motion.div>

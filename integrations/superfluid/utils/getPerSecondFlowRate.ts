@@ -8,9 +8,13 @@ export const getPerSecondFlowRate = (monthlyAmount: string) => {
 }
 
 export const getPerMonthFlowRate = (flowPerSecond: string) => {
-  const monthlyAmountWei = +flowPerSecond * 3600 * 24 * 30
-  const monthlyAmount = ethers.utils.formatEther(`${monthlyAmountWei}`)
-  return monthlyAmount
+  try {
+    const monthlyAmountWei = +flowPerSecond * 3600 * 24 * 30
+    const monthlyAmount = ethers.utils.formatEther(`${monthlyAmountWei}`)
+    return monthlyAmount
+  } catch (error) {
+    console.error('Error getting flow rate.', error)
+  }
 }
 
 export const getWeiAmount = (amount: string) => {

@@ -92,7 +92,7 @@ export const turboIntegrations = {
     name: 'Superfluid',
     href: '/integration/superfluid',
     url: 'https://docs.superfluid.finance/superfluid/',
-    description: 'Use this template to get up and running with TurboETH and Superfluid.',
+    description: 'Bringing subscriptions, salaries, vesting, and rewards to DAOs and crypto-native businesses worldwide.',
     imgLight: '/integrations/superfluid-light.svg',
     imgDark: '/integrations/superfluid-dark.svg',
   },

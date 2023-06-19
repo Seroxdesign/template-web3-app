@@ -3,12 +3,16 @@
 import { useEffect, useState } from 'react'
 
 // import { ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { motion } from 'framer-motion'
+import { XOctagon } from 'lucide-react'
 import { useAccount, useChainId, useWalletClient } from 'wagmi'
 
 import { LinkComponent } from '@/components/shared/link-component'
 import { FADE_DOWN_ANIMATION_VARIANTS } from '@/config/design'
+import { cn } from '@/lib/utils'
 
+import { INFURA_API_KEY } from '../utils/constants'
 import { useSuperFluidWithWagmiProvider } from '@/superfluid/hooks/use-superfluid-with-wagmi-provider'
 import { getInfuraUrl, getPerMonthFlowRate } from '@/superfluid/utils'
 // import { INFURA_API_KEY } from '@/superfluid/utils/constants'
@@ -20,14 +24,12 @@ export default function App() {
   const { data: walletClient } = useWalletClient()
   const chainId = useChainId()
   const infuraUrl = getInfuraUrl(chainId)
-  console.log({ infuraUrl, chainId })
 
-  // const provider = new ethers.providers.JsonRpcProvider(`${infuraUrl}/${INFURA_API_KEY}`)
-  // const signer = provider.getSigner()
+  const provider = new ethers.providers.JsonRpcProvider(`${infuraUrl}/${INFURA_API_KEY}`)
+  const signer = provider.getSigner()
   const sf = useSuperFluidWithWagmiProvider()
   const [streams, setStreams] = useState<any[]>()
-  const [streamsLoading, setStreamsLoading] = useState(false)
-  console.log('delete flow', streams)
+  const [streamsLoading, setStreamsLoading] = useState(true)
 
   useEffect(() => {
     console.log('sf changed', sf)
@@ -35,17 +37,18 @@ export default function App() {
 
   useEffect(() => {
     if (!sf || streams) return
-    console.log('Fetching streams...')
+    // setStreamsLoading(true)
 
     const getStreams = async () => {
       try {
-        setStreamsLoading(true)
         return await sf?.query.listStreams({
           //use wallet address of user, instead of hardcoded address and checksum so it's uppercase
           sender: address,
         })
       } catch (error) {
         console.error(error)
+        setStreamsLoading(false)
+      } finally {
         setStreamsLoading(false)
       }
     }
@@ -95,34 +98,79 @@ export default function App() {
         animate="show"
         viewport={{ once: true }}
         className="flex flex-col gap-4">
-        <h2 className="text-base">Current Streams</h2>
-        {streamsLoading && streams?.length === 0 && <p>Loading streams...</p>}
+        <h2 className="text-base">Your Streams</h2>
+        {streamsLoading && <p>Loading streams...</p>}
         {!streamsLoading && streams?.length ? (
-          <div className="">
-            {streams.map((stream, i) => {
-              return (
-                <div
-                  key={`stream-${i}`}
-                  className="mb-4 flex justify-between rounded-xl border-[1px] border-neutral-600 bg-neutral-800 p-8 text-neutral-400">
-                  <p>Current flow rate: {Number(getPerMonthFlowRate(stream.currentFlowRate)).toFixed(0)} / per month</p>
-                  <p style={{ marginLeft: '1em' }}>Receiver: {stream.receiver}</p>
-                  <p style={{ marginLeft: '1em' }}>Token: {stream.token.symbol}</p>
-                  <button style={{ marginLeft: '1em', backgroundColor: 'black', padding: '0.5em', color: 'white' }} onClick={() => onSubmit(stream)}>
-                    Stop Stream
-                  </button>
-                </div>
-              )
-            })}
-          </div>
-        ) : (
+          <table className="overflow-hidden rounded-2xl border border-slate-900 bg-neutral-700 p-1">
+            <thead>
+              <tr className="bg-slate-400 text-neutral-900 dark:bg-slate-500">
+                <th className="p-2 py-3 text-left font-normal">Flow rate</th>
+                <th className="p-2 py-3 text-left font-normal">Receiver</th>
+                <th className="p-2 py-3 text-left font-normal">Token</th>
+                <th className="p-2 py-3 text-left font-normal">Action</th>
+              </tr>
+            </thead>
+            <tbody className="overflow-hidden rounded-2xl">
+              {streams.map((stream, i) => {
+                //test if i is odd
+                const rowClass =
+                  i % 2 == 0
+                    ? 'bg-slate-200 text-neutral-600 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-neutral-200 hover:text-neutral-900'
+                    : 'bg-slate-300 text-neutral-600 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-neutral-200 hover:text-neutral-900'
+                const firstClass = i === 0 ? '' : ''
+                const lastClass = i === streams.length - 1 ? '' : ''
+                return (
+                  <tr
+                    key={`stream-${i}`}
+                    className={cn(
+                      'border-b-[1px] border-neutral-600 bg-neutral-800 p-8 text-neutral-400 transition-colors ease-in-out',
+                      rowClass,
+                      firstClass,
+                      lastClass
+                    )}>
+                    <td className="p-2">{Number(getPerMonthFlowRate(stream.currentFlowRate)).toFixed(0)} / per month</td>
+                    <td className="p-2">{stream.receiver}</td>
+                    <td className="p-2">{stream.token.symbol}</td>
+                    <td className="flex flex-row justify-end p-2">
+                      <button
+                        className="btn-red inline-flex w-auto items-center rounded-full p-2 font-normal uppercase"
+                        onClick={() => onSubmit(stream)}>
+                        <XOctagon />{' '}
+                        <span aria-label="Stop this flow" className="sr-only">
+                          Stop Flow
+                        </span>
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        ) : undefined}
+        {!streamsLoading && streams === undefined ? (
           <p>
-            No streams!{' '}
+            We couldn&apos;t find any streams!{' '}
             <LinkComponent className="font-bold text-gray-400" href={'/integration/superfluid/start-flow'}>
               Start a stream.
             </LinkComponent>
           </p>
-        )}
+        ) : undefined}
       </motion.div>
+      <hr className="my-4" />
+      <div className="flex items-center justify-between">
+        <h3 className="text-center">Superfluid streams</h3>
+        <p className="text-center text-sm text-gray-500">
+          View & stop any existing Superfluid streams or{' '}
+          <LinkComponent className="font-bold text-gray-400" href={'/integration/superfluid/start-flow'}>
+            start a new stream
+          </LinkComponent>{' '}
+          or{' '}
+          <LinkComponent className="font-bold text-gray-400" isExternal href={'https://app.superfluid.finance/wrap?upgrade'}>
+            wrap some tokens
+          </LinkComponent>
+          .
+        </p>
+      </div>
     </motion.div>
   )
 }

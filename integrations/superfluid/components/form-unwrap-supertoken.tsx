@@ -40,8 +40,6 @@ export default function App() {
     },
   })
 
-  console.log('Balance / Unwrap supertoken')
-
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
@@ -59,6 +57,15 @@ export default function App() {
     await downgradeOperation?.exec(signer)
   }
 
+  const onSetMaxAmount = () => {
+    try {
+      console.log('Set max amount to unwrap')
+      throw new Error('Max amount not implemented yet')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="card w-full">
       <Form {...form}>
@@ -74,7 +81,7 @@ export default function App() {
               name="token"
               render={({ field }) => (
                 <FormItem className="flex  w-1/2 flex-col gap-1">
-                  <FormLabel className="text-base">Supertoken</FormLabel>
+                  <FormLabel className="text-base">Token to unwrap</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="input mt-4 text-gray-600 placeholder:text-neutral-400 dark:text-gray-600 dark:placeholder:text-neutral-400">
@@ -86,7 +93,7 @@ export default function App() {
                       <SelectItem value="DAIx">DAIx</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription className="text-neutral-400">Select a Supertoken to stream.</FormDescription>
+                  <FormDescription className="text-neutral-400">Select a Supertoken to unwrap.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -96,11 +103,29 @@ export default function App() {
               name="amount"
               render={({ field }) => (
                 <FormItem className="flex w-1/2 flex-col gap-1">
-                  <FormLabel className="text-base">Amount (Monthly)</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="inline-flex text-base">Amount</FormLabel>
+                    <div className="flex grow items-center justify-end text-right text-gray-400">
+                      <span>
+                        {'0.93455'}&nbsp;
+                        {'USDCf'}
+                      </span>
+                      &nbsp;(
+                      <a className="inline py-0 font-normal text-emerald-600 shadow-none hover:cursor-pointer" onClick={() => onSetMaxAmount()}>
+                        Max
+                      </a>
+                      )
+                    </div>
+                  </div>
                   <FormControl>
-                    <Input placeholder="100 / month" className="input " {...field} />
+                    <Input
+                      placeholder="Amount to unwrap"
+                      className="input mt-4 text-gray-600 placeholder:text-neutral-400 dark:text-gray-600 dark:placeholder:text-neutral-400"
+                      type="number"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription className="text-neutral-400"> Amount to stream to receiver, monthly. </FormDescription>
+                  <FormDescription className="text-neutral-400"> Amount to unwrap.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -113,12 +138,12 @@ export default function App() {
       </Form>
       <hr className="my-4" />
       <div className="flex items-center justify-between">
-        <h3 className="text-center">Superfluid</h3>
+        <h3 className="text-center">Superfluid SuperTokens</h3>
         <p className="text-center text-sm text-gray-500">
-          <LinkComponent className="font-bold" isExternal href={'https://platform.openai.com/account/api-keys'}>
-            Get your API keys
-          </LinkComponent>{' '}
-          to interact with OpenAI.
+          Unwrap SuperTokens or wrap them in the{' '}
+          <LinkComponent className="font-bold" isExternal href={'https://app.superfluid.finance/wrap'}>
+            Superfluid dashboard
+          </LinkComponent>
         </p>
       </div>
     </div>
