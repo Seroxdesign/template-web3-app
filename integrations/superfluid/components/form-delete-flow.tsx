@@ -12,10 +12,9 @@ import { LinkComponent } from '@/components/shared/link-component'
 import { FADE_DOWN_ANIMATION_VARIANTS } from '@/config/design'
 import { cn } from '@/lib/utils'
 
-import { INFURA_API_KEY } from '../utils/constants'
 import { useSuperFluidWithWagmiProvider } from '@/superfluid/hooks/use-superfluid-with-wagmi-provider'
 import { getInfuraUrl, getPerMonthFlowRate } from '@/superfluid/utils'
-// import { INFURA_API_KEY } from '@/superfluid/utils/constants'
+import { INFURA_API_KEY } from '@/superfluid/utils/constants'
 
 type Paging = { take: number; skip?: number; lastId?: string }
 
@@ -32,12 +31,7 @@ export default function App() {
   const [streamsLoading, setStreamsLoading] = useState(true)
 
   useEffect(() => {
-    console.log('sf changed', sf)
-  }, [sf])
-
-  useEffect(() => {
     if (!sf || streams) return
-    // setStreamsLoading(true)
 
     const getStreams = async () => {
       try {
@@ -101,7 +95,7 @@ export default function App() {
         <h2 className="text-base">Your Streams</h2>
         {streamsLoading && <p>Loading streams...</p>}
         {!streamsLoading && streams?.length ? (
-          <table className="overflow-hidden rounded-2xl border border-slate-900 bg-neutral-700 p-1">
+          <table className="overflow-hidden rounded-xl border border-slate-900 bg-neutral-700 p-1">
             <thead>
               <tr className="bg-slate-400 text-neutral-900 dark:bg-slate-500">
                 <th className="p-2 py-3 text-left font-normal">Flow rate</th>
@@ -112,7 +106,6 @@ export default function App() {
             </thead>
             <tbody className="overflow-hidden rounded-2xl">
               {streams.map((stream, i) => {
-                //test if i is odd
                 const rowClass =
                   i % 2 == 0
                     ? 'bg-slate-200 text-neutral-600 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-neutral-200 hover:text-neutral-900'
@@ -147,7 +140,7 @@ export default function App() {
             </tbody>
           </table>
         ) : undefined}
-        {!streamsLoading && streams === undefined ? (
+        {!streamsLoading && !streams ? (
           <p>
             We couldn&apos;t find any streams!{' '}
             <LinkComponent className="font-bold text-gray-400" href={'/integration/superfluid/start-flow'}>

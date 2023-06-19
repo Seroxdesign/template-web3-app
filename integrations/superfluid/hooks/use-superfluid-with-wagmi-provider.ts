@@ -16,11 +16,7 @@ export function useSuperFluidWithWagmiProvider() {
   const provider = new ethers.providers.JsonRpcProvider(`${infuraUrl}/${INFURA_API_KEY}`)
   const [sfFramework, setSfFramework] = useState<Framework>()
 
-  console.log({ walletClient, provider })
-
   useEffect(() => {
-    console.log('framework', sfFramework)
-
     const getFramework = async () => {
       try {
         if (!provider) return

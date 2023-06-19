@@ -30,7 +30,6 @@ export default function App() {
   // const provider = new ethers.providers.JsonRpcProvider(`${infuraUrl}/${INFURA_API_KEY}`)
   // const signer = provider.getSigner()
   const sf = useSuperFluidWithWagmiProvider()
-  console.log('send flow', sf)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
